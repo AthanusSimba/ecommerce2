@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% block head_title %}Welcome to{% endblock head_title %}
+{% block content %}
+{{errors}}
+<div class="col-sm-8 col-sm-offset-20">
+{% if empty %}
+    <h1 style="text-align:center">{{empty_message}}</h1>
+{% else %}
+
+<table class="table">
+        <thead>
+        <th>Item</th>
+        <th>Price</th>
+        <th>Qty</th>
+
+        </thead>
+    {% for item in cart.cartitem_set.all %}
+
+    <tr>
+        <td>{{item.product}}
+            {% if item.variations.all%}
+            <ul>
+                {% for subitem in item.variations.all %}
+                    <li>{{subitem.category|capfirst}}: {{subitem.title|capfirst}}</li>
+                {%endfor %}
+            </ul>
+            {% endif %}
+        </td>
+        <td>{{item.product.price}}</td>
+        <td>{{item.quantity}}</td>
+
+        <td><a href="{% url 'remove_from_cart' item.id %}">Remove</a> </td>
+    </tr>
+    {% endfor %}
+
+    <tfoot>
+    <td></td>
+    <td>Total: {{ cart.total }}</td>
+    </tfoot>
+</table>
+    <a href="{% url 'checkout' %}">Checkout</a>
+
+{% endif %}
+</div>
+{% endblock content %}

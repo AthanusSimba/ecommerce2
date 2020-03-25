@@ -1,0 +1,101 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block head_title %}Welcome to{% endblock head_title %}
+
+{% block jumbotron2 %}
+    <div class="container">
+        <div class="jumbotron">
+            <h1>Navbar example</h1>
+            <p class="lead">This example is a quick exercise to illustrate how fixed to top navbar works. As you scroll,
+                it will remain fixed to the top of your browser’s viewport.
+            </p>
+            <a class="btn btn-lg btn-primary" href="https://getbootstrap.com/docs/4.4/components/navbar/"
+               role="button">View navbar docs &raquo;</a>
+        </div>
+    </div>
+
+{% endblock jumbotron2 %}
+{% block jumbotron %}
+{% if sliders %}
+<div class="container">
+    <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+    <ol class="carousel-indicators">
+        {% for slider in sliders %}
+      <li data-target="#carouselExampleIndicators" data-slide-to="{{ forloop.counter }}"
+          {% if forloop.first %} class="active" {% endif %}></li>
+        {% endfor %}
+    </ol>
+    <div class="carousel-inner">
+        {% for slider in sliders %}
+            <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                {% if slider.url_link %}<a href="{{ slider.url_link }}">{% endif %}
+            <img class="d-block w-100" src="{{ slider.get_image_url }}" alt="Third slide">
+                {% if slider.url_link %}</a>{% endif %}
+
+            <div class="carousel-caption d-none d-md-block">
+                {% if slider.header_text %}
+                    <h5>{{ slider.header_text }}</h5>
+                {% endif %}
+
+                {% if slider.text %}
+                    <p>{{slider.text}}</p>
+                {% endif %}
+            </div>
+            </div>
+        {% endfor %}
+        </div>
+    </div>
+    <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+      <span class="sr-only" style="">Previous</span>
+    </a>
+    <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+      <span class="sr-only">Next</span>
+    </a>
+  </div>
+</div>
+{% else %}
+<p>No sliders</p>
+{% endif %}
+{% endblock jumbotron %}
+
+{% block content %}
+    <div class="row">
+
+            {% for product in products %}
+            <div class="col-sm-3">
+            <div class="thumbnail">
+            {% if product.productimage_set.all %}
+                {% for item in product.productimage_set.all %}
+
+                    {% if item.featured %}
+                       <a href="{{product.get_absolute_url}}"> <div style="width:200px; height: 200px; margin: 0 auto;">
+                            <div class="background_img_thumb"
+                                style="background-image: url('{{ item.image.url }}');">
+                            </div>
+                        </div></a>
+                     <!--<img class="img-fluid" src="{{ item.image.url }}">-->
+                    {% endif %}
+                {% endfor %}
+            {% else %}
+            ​
+            {% endif %}
+                <div class="caption">
+                    <a href="{% url 'single_product' product.slug %}"><h3>{{product.title}}</h3></a>
+                    <p>{{product.description|truncatewords_html:15 }}</p>
+                    <p>
+                        <a href="{{product.get_absolute_url}}" class="btn btn-primary" role="button">View</a>
+                        <a href="#" class="btn btn-default" role="button">Button</a>
+                    </p>
+                </div>
+
+            </div>
+            </div>
+                {% cycle ""  "" "" "</div><br/> <div class='row'></div>" %}
+
+
+            {% endfor  %}
+
+    </div>
+{% endblock content %}

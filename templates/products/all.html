@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block head_title %}Welcome to{% endblock head_title %}
+
+{% block jumbotron2 %}
+    <div class="container">
+        <div class="jumbotron">
+            <h1>Navbar example</h1>
+            <p class="lead">This example is a quick exercise to illustrate how fixed to top navbar works. As you scroll,
+                it will remain fixed to the top of your browser’s viewport.
+            </p>
+            <a class="btn btn-lg btn-primary" href="https://getbootstrap.com/docs/4.4/components/navbar/"
+               role="button">View navbar docs &raquo;</a>
+        </div>
+    </div>
+
+{% endblock jumbotron2 %}
+
+
+{% block content %}
+    <div class="row">
+
+            {% for product in products %}
+            <div class="col-sm-3">
+            <div class="thumbnail">
+            {% if product.productimage_set.all %}
+                {% for item in product.productimage_set.all %}
+
+                    {% if item.featured %}
+                       <a href="{{product.get_absolute_url}}"> <div style="width:200px; height: 200px; margin: 0 auto;">
+                            <div class="background_img_thumb"
+                                style="background-image: url('{{ item.image.url }}');
+                                                        ">
+                            </div>
+                        </div></a>
+                     <!--<img class="img-fluid" src="{{ item.image.url }}">-->
+                    {% endif %}
+                {% endfor %}
+            {% else %}
+            ​
+            {% endif %}
+                <div class="caption">
+                    <a href="{% url 'single_product' product.slug %}"><h3>{{product.title}}</h3></a>
+                    <p>{{product.description|truncatewords_html:15 }}</p>
+                    <p>
+                        <a href="{{product.get_absolute_url}}" class="btn btn-primary" role="button">View</a>
+                        <a href="#" class="btn btn-default" role="button">Button</a>
+                    </p>
+                </div>
+
+            </div>
+            </div>
+                {% cycle "" "" "" "</div><br/> <div class='row'></div>" %}
+
+
+            {% endfor  %}
+
+    </div>
+{% endblock content %}

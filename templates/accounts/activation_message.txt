@@ -1,0 +1,6 @@
+Hello {{ user }},
+Please activate your account here:
+{{ url }}
+Thank you!
+
+Simba store
